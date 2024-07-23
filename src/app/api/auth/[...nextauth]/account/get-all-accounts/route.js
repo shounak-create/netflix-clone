@@ -6,6 +6,25 @@ export const dynamic = "force-dynamic";
 
 export async function GET(req) {
     try{
+        await connecttoDb()
+
+        const {searchParams} = new URL(req.url);
+        const id = searchParams.get('id');
+
+        const getAllAccounts = await Account.find({uid:id})
+
+        if (getAllAccounts) {
+            return NextResponse.json({
+                success:true,
+                data:getAllAccounts
+            })
+        } else {
+            return NextResponse.json({
+                success:false,
+                message:"Something went wrong..."
+            })
+        }
+
 
     } catch(e){
         console.log(e);

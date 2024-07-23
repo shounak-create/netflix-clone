@@ -7,6 +7,30 @@ export const dynamic = "force-dynamic";
 
 export async function POST(req) {
     try{
+        await connecttoDb()
+
+        const {pin,accountId,uid} = await req.json();
+
+        const getCurrentAccount = await Account.findOne({_id:accountId,uid});
+
+        if (!getCurrentAccount)({
+            success:false,
+            message:"Account not found.."
+        })
+
+        const checkPin = await compare(pin,getCurrentAccount.pin);
+
+        if (checkPin){
+            return NextResponse.json({
+                success:true,
+                message:"Welcome to Netflix.."
+            })
+        } else{
+            return NextResponse.json({
+                success:false,
+                message:"InCorrect pin"
+            })
+        }
 
     } catch(e){
         console.log(e);
