@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
-import moongoose from "moongoose";
 
-const AccountSchema = new moongoose.Schema(
+import mongoose from "mongoose";
+
+const AccountSchema = new mongoose.Schema(
     {
         uid:String,
         name:String,
@@ -10,6 +10,6 @@ const AccountSchema = new moongoose.Schema(
     {timeStamps:true}
 );
 
-const Account = moongoose.models.Account || mongoose.model('Account', AccountSchema)
+const Account = mongoose.models.Account || mongoose.model('Account', AccountSchema)
 
 export default Account;
