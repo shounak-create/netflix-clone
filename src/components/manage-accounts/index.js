@@ -97,7 +97,7 @@ export default function ManageAccounts() {
                         accounts && accounts.length ?
                             accounts.map(item => 
                             <li className="max-w-[200px] w-[155px] cursor-pointer flex flex-col items-center gap-3 min-w-[200px]" key={item._id}>
-                                <div className="max-w-[200px] w-[155px] cursor-pointer flex flex-col items-center gap-3 min-w-[200px]">
+                                <div className="cursor-pointer flex flex-col items-center gap-3">
                                     
                                     <img
                                         src="https://occ-0-2611-3663.1.nflxso.net/dnm/api/v6/K6hjPJd6cR6FpVELC5Pd6ovHRSk/AAAABfNXUMVXGhnCZwPI1SghnGpmUgqS_J-owMff-jig42xPF7vozQS1ge5xTgPTzH7ttfNYQXnsYs4vrMBaadh4E6RTJMVepojWqOXx.png?r=1d4"
