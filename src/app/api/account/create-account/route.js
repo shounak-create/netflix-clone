@@ -1,5 +1,6 @@
 import connecttoDb from "@/database";
 import Account from "@/models/Account";
+import { hash } from "bcryptjs";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -14,7 +15,7 @@ export async function POST(req) {
 
         const isAccountAlreadyExists = await Account.find({uid,name})
         const allAccounts = await Account.find({})
-        if (isAccountAlreadyExists){
+        if (isAccountAlreadyExists && isAccountAlreadyExists.length > 0){
             return NextResponse.json({
                 success:false,
                 message: "User already exists with this name.."
