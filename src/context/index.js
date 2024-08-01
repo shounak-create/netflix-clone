@@ -1,7 +1,7 @@
 'use client'
 
 import { useSession } from "next-auth/react";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import CircleLoader from "@/components/circle-loader/index"
 
 export const GlobalContext = createContext(null);
@@ -13,6 +13,10 @@ export default function GlobalState({ children }) {
     const [pageLoader, setPageLoader] = useState(true)
 
     const { data: session } = useSession();
+
+    useEffect(()=>{
+        setLoggedInAccount(JSON.parse(sessionStorage.getItem('loggedInAccount')))
+    },[])
 
     if (session === undefined) return <CircleLoader />
 
