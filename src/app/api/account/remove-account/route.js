@@ -6,38 +6,35 @@ export const dynamic = "force-dynamic";
 
 export async function DELETE(req) {
     try {
-        await connecttoDb()
-
-        const {searchParams} = new URL(req.url);
-        const {id} = searchParams.get("id");
-
-        //it will execute if account is not in database
+        await connecttoDb();
+        const { searchParams } = new URL(req.url);
+        const id = searchParams.get("id");
+    
         if (!id) {
-            return NextResponse.json({
-                success:false,
-                message:"Something went wrong...",
-            });
+          return NextResponse.json({
+            success: false,
+            message: "Account ID is mandatory",
+          });
         }
-
+    
         const deleteAccount = await Account.findByIdAndDelete(id);
-
-        if (deleteAccount){
-            return NextResponse.json({
-                success:true,
-                message:"Account deleted successfully..",
-            });
+    
+        if (deleteAccount) {
+          return NextResponse.json({
+            success: true,
+            message: "Account deleted successfully",
+          });
         } else {
-            return NextResponse.json({
-                success:false,
-                message:"Something went wrong...",
-            });
+          return NextResponse.json({
+            success: false,
+            message: "Something Went wrong",
+          });
         }
-
-    } catch(e){
+      } catch (e) {
         console.log(e);
         return NextResponse.json({
-            success:false,
-            message:"Something went wrong...",
+          success: false,
+          message: "Something Went wrong",
         });
-    }
+      }
 }

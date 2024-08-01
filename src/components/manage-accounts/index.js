@@ -2,11 +2,12 @@
 
 import { GlobalContext } from "@/context";
 import { useSession } from "next-auth/react";
-import PageLoader from "next/dist/client/page-loader";
 import { useContext, useEffect, useState } from "react";
 import CircleLoader from "../circle-loader";
 import AccountForm from "./account-form";
 import { TrashIcon } from "@heroicons/react/24/outline";
+import { usePathname, useRouter } from "next/navigation";
+
 
 const initialFormata = {
   name: "",
@@ -14,8 +15,7 @@ const initialFormata = {
 };
 
 export default function ManageAccounts() {
-  const { accounts, setAccounts, pageLoader, setPageLoader } =
-    useContext(GlobalContext);
+  const { accounts, setAccounts, pageLoader, setPageLoader } = useContext(GlobalContext);
   const { data: session } = useSession();
   const [showAccountForm, setShowAccountForm] = useState(false);
   const [formData, setFormData] = useState(initialFormata);
@@ -84,6 +84,19 @@ export default function ManageAccounts() {
     console.log(data, "datadata");
   }
 
+  async function handleRemoveAccount(getItem) {
+    const res = await fetch(`/api/account/remove-account?id=${getItem._id}`, {
+      method: "DELETE",
+    });
+
+    const data = await res.json();
+    console.log(data);
+    if (data.success) {
+      getAllAccounts();
+      setShowDeleteIcon(false);
+    }
+  }
+
   if (pageLoader) return <CircleLoader />;
 
   return (
@@ -99,14 +112,15 @@ export default function ManageAccounts() {
                   className="max-w-[200px] w-[155px] cursor-pointer flex flex-col items-center gap-3 min-w-[200px]"
                   key={item._id}
                 >
-                  <div className="cursor-pointer flex flex-col items-center gap-3">
-                  <img
+                  <div className="relative">
+                    <img
                       src="https://occ-0-2611-3663.1.nflxso.net/dnm/api/v6/K6hjPJd6cR6FpVELC5Pd6ovHRSk/AAAABfNXUMVXGhnCZwPI1SghnGpmUgqS_J-owMff-jig42xPF7vozQS1ge5xTgPTzH7ttfNYQXnsYs4vrMBaadh4E6RTJMVepojWqOXx.png?r=1d4"
                       alt="Account"
                       className="max-w-[200px] rounded min-w-[84px] max-h-[200px] min-h-[84px] object-cover w-[155px] h-[155px]"
                     />
                     {showDeleteIcon ? (
                       <div
+                        onClick={() => handleRemoveAccount(item)}
                         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer"
                       >
                         <TrashIcon width={30} height={30} color="black" />
@@ -134,22 +148,22 @@ export default function ManageAccounts() {
                 </li>
               ))
             : null}
-          {accounts && accounts.length < 4 ? (
+          {accounts && accounts.length < 4 ? 
             <li
               onClick={() => setShowAccountForm(!showAccountForm)}
               className="border text-black bg-[#e5b109] font-bold text-lg border-black max-w-[200px] rounded min-w-[84px] max-h-[200px] min-h-[84px] w-[155px] h-[155px] cursor-pointer flex justify-center items-center"
             >
               Add Account
             </li>
-          ) : null}
+           : null}
         </ul>
         <div className="text-center">
-          <span
+          <div
             onClick={() => setShowDeleteIcon(!showDeleteIcon)}
             className="border border-gray-100 cursor-pointer tracking-wide inline-flex text-sm px-[1.5em] py-[0.5em]"
           >
             Manage Profiles
-          </span>
+          </div>
         </div>
       </div>
       <AccountForm
